@@ -1,0 +1,18 @@
+version: '3'
+services:
+  jupyter:
+    image: 475757276268.dkr.ecr.ap-south-1.amazonaws.com/playment/jupyterhub:latest
+    restart: always
+    container_name: jupyterhub
+    env_file:
+      - .env
+    ports:
+      - "8080:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "data:/home"
+
+volumes:
+  data:
+    external:
+      name: jupyterhub-data
