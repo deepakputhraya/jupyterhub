@@ -1,4 +1,15 @@
 #!/bin/bash
 
+for home in /home/*; do
+  if [ -d "$home" ]; then
+    username=$(basename "$home")
+    useradd "$username"
+    usermod -d "$home" "$username"
+    chown -R "$username" "$home"
+    chgrp -R "$username" "$home"
+    chmod -R u+rw,g+r,o+r "$home"
+  fi
+done
+
 exec jupyterhub --ip 0.0.0.0
 

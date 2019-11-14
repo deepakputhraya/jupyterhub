@@ -20,7 +20,8 @@ RUN apt-get install -y curl \
         nmap \
         tree \
         libcurl4-openssl-dev \
-        libxml2-dev
+        libxml2-dev \
+        openjdk-8-jdk
 
 RUN pip install jupyter_contrib_nbextensions \
         oauthenticator \
@@ -30,10 +31,9 @@ RUN pip install jupyter_contrib_nbextensions \
         dockerspawner
 
 RUN ipcluster nbextension enable
-RUN Rscript -e "install.packages(c('repr', 'IRdisplay', 'IRkernel','tidyverse','DBI','doparallel','RPostgreSQL','googlesheets','foreach','reshape2','jsonlite','httpuv,'gmailr','tableHTML'), type = 'source')"
+RUN Rscript -e "install.packages(c('repr', 'IRdisplay', 'IRkernel', 'tidyverse', 'DBI', 'doparallel', 'RPostgreSQL', 'googlesheets', 'foreach', 'reshape2', 'jsonlite', 'httpuv', 'gmailr', 'tableHTML'), type = 'source')"
 RUN Rscript -e "IRkernel::installspec(user = FALSE)"
 
-COPY docker-entrypoint docker-entrypoint
 COPY jupyterhub_config.py jupyterhub_config.py
 COPY requirements.txt requirements.txt
 
@@ -45,8 +45,11 @@ RUN jupyter labextension install @krassowski/jupyterlab_go_to_definition \
         @jupyterlab/github \
         @jupyterlab/git \
         @oriolmirosa/jupyterlab_materialdarker \
-        @jupyterlab/toc
+        @jupyterlab/toc \
+        @jupyterlab/plotly-extension
+        
 
+COPY docker-entrypoint docker-entrypoint
 RUN chmod +x docker-entrypoint
 ENTRYPOINT ["./docker-entrypoint"]
 
